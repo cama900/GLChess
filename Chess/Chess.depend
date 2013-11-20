@@ -1,0 +1,287 @@
+# depslib dependency file v1.0
+1384971002 source:i:\cfinalproject\chess\main.cpp
+	<GL/gl.h>
+	<GL/glut.h>
+	"glm.h"
+	<ctime>
+	"piece.h"
+	<iostream>
+	<typeinfo>
+
+1383680544 i:\codeblocks-ep\mingw\include\gl\gl.h
+
+1383598068 i:\codeblocks-ep\mingw\include\gl\glut.h
+	"freeglut_std.h"
+
+1383598068 i:\codeblocks-ep\mingw\include\gl\freeglut_std.h
+	<windows.h>
+	<OpenGL/gl.h>
+	<OpenGL/glu.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	<stdlib.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\windows.h
+	<winresrc.h>
+	<stdarg.h>
+	<windef.h>
+	<wincon.h>
+	<winbase.h>
+	<wingdi.h>
+	<winuser.h>
+	<winnls.h>
+	<winver.h>
+	<winnetwk.h>
+	<winreg.h>
+	<winsvc.h>
+	<cderr.h>
+	<dde.h>
+	<ddeml.h>
+	<dlgs.h>
+	<imm.h>
+	<lzexpand.h>
+	<mmsystem.h>
+	<nb30.h>
+	<rpc.h>
+	<shellapi.h>
+	<winperf.h>
+	<commdlg.h>
+	<winspool.h>
+	<winsock2.h>
+	<winsock.h>
+	<ole2.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\winresrc.h
+	<winuser.h>
+	<winnt.h>
+	<winver.h>
+	<dde.h>
+	<dlgs.h>
+	<commctrl.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\winuser.h
+
+1383680542 i:\codeblocks-ep\mingw\include\winnt.h
+	<winerror.h>
+	<string.h>
+	<basetsd.h>
+	<pshpack4.h>
+	<poppack.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\winerror.h
+
+1383680542 i:\codeblocks-ep\mingw\include\string.h
+	<_mingw.h>
+	<stddef.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\_mingw.h
+
+1383680538 i:\codeblocks-ep\mingw\include\basetsd.h
+
+1383680540 i:\codeblocks-ep\mingw\include\pshpack4.h
+
+1383680540 i:\codeblocks-ep\mingw\include\poppack.h
+
+1383680542 i:\codeblocks-ep\mingw\include\winver.h
+
+1383680538 i:\codeblocks-ep\mingw\include\dde.h
+
+1383680538 i:\codeblocks-ep\mingw\include\dlgs.h
+
+1383680538 i:\codeblocks-ep\mingw\include\commctrl.h
+	<prsht.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\prsht.h
+
+1383680542 i:\codeblocks-ep\mingw\include\windef.h
+	<winnt.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\wincon.h
+
+1383680542 i:\codeblocks-ep\mingw\include\winbase.h
+
+1383680542 i:\codeblocks-ep\mingw\include\wingdi.h
+
+1383680542 i:\codeblocks-ep\mingw\include\winnls.h
+
+1383680542 i:\codeblocks-ep\mingw\include\winnetwk.h
+
+1383680542 i:\codeblocks-ep\mingw\include\winreg.h
+
+1383680542 i:\codeblocks-ep\mingw\include\winsvc.h
+
+1383680538 i:\codeblocks-ep\mingw\include\cderr.h
+
+1383680538 i:\codeblocks-ep\mingw\include\ddeml.h
+
+1383680540 i:\codeblocks-ep\mingw\include\imm.h
+
+1383680540 i:\codeblocks-ep\mingw\include\lzexpand.h
+
+1383680540 i:\codeblocks-ep\mingw\include\mmsystem.h
+
+1383680540 i:\codeblocks-ep\mingw\include\nb30.h
+
+1383680540 i:\codeblocks-ep\mingw\include\rpc.h
+	<windows.h>
+	<rpcdce.h>
+	<rpcnsi.h>
+	<rpcnterr.h>
+	<winerror.h>
+	<excpt.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\rpcdce.h
+	<basetyps.h>
+	<rpcdcep.h>
+
+1383680538 i:\codeblocks-ep\mingw\include\basetyps.h
+
+1383680540 i:\codeblocks-ep\mingw\include\rpcdcep.h
+
+1383680540 i:\codeblocks-ep\mingw\include\rpcnsi.h
+
+1383680540 i:\codeblocks-ep\mingw\include\rpcnterr.h
+
+1383680540 i:\codeblocks-ep\mingw\include\excpt.h
+	<_mingw.h>
+	<windef.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\shellapi.h
+	<pshpack2.h>
+	<poppack.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\pshpack2.h
+
+1383680542 i:\codeblocks-ep\mingw\include\winperf.h
+
+1383680538 i:\codeblocks-ep\mingw\include\commdlg.h
+	<unknwn.h>
+	<prsht.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\unknwn.h
+	<windows.h>
+	<objfwd.h>
+	<wtypes.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\objfwd.h
+	<basetyps.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\wtypes.h
+	<rpc.h>
+	<rpcndr.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\rpcndr.h
+	<rpcnsip.h>
+	<objfwd.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\rpcnsip.h
+
+1383680542 i:\codeblocks-ep\mingw\include\winspool.h
+
+1383680542 i:\codeblocks-ep\mingw\include\winsock2.h
+	<windows.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\winsock.h
+	<windows.h>
+	<mswsock.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\mswsock.h
+
+1383680540 i:\codeblocks-ep\mingw\include\ole2.h
+	<winerror.h>
+	<objbase.h>
+	<olectlid.h>
+	<oleauto.h>
+	<oleidl.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\objbase.h
+	<rpc.h>
+	<rpcndr.h>
+	<stdlib.h>
+	<basetyps.h>
+	<wtypes.h>
+	<unknwn.h>
+	<objidl.h>
+	<cguid.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\stdlib.h
+	<_mingw.h>
+	<stddef.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\objidl.h
+	<objfwd.h>
+
+1383680538 i:\codeblocks-ep\mingw\include\cguid.h
+
+1383680540 i:\codeblocks-ep\mingw\include\olectlid.h
+
+1383680540 i:\codeblocks-ep\mingw\include\oleauto.h
+	<oaidl.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\oaidl.h
+	<windows.h>
+	<ole2.h>
+
+1383680540 i:\codeblocks-ep\mingw\include\oleidl.h
+	<objfwd.h>
+
+1383680544 i:\codeblocks-ep\mingw\include\gl\glu.h
+	<stddef.h>
+	<GL/gl.h>
+
+1208747060 source:i:\cfinalproject\chess\glm.cpp
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	"glm.h"
+
+1383680540 i:\codeblocks-ep\mingw\include\math.h
+	<_mingw.h>
+
+1383680542 i:\codeblocks-ep\mingw\include\stdio.h
+	<_mingw.h>
+	<stddef.h>
+	<stdarg.h>
+	<sys/types.h>
+
+1383680544 i:\codeblocks-ep\mingw\include\sys\types.h
+	<_mingw.h>
+	<stddef.h>
+
+1383680538 i:\codeblocks-ep\mingw\include\assert.h
+	<_mingw.h>
+
+1384471720 i:\cfinalproject\chess\glm.h
+	<GL/glut.h>
+
+1384907850 source:e:\cfinalproject\chess\main.cpp
+	<GL/gl.h>
+	<GL/glut.h>
+	"glm.h"
+	<iostream>
+	<ctime>
+	"piece.h"
+
+1384471720 e:\cfinalproject\chess\glm.h
+	<GL/glut.h>
+
+1208747060 source:e:\cfinalproject\chess\glm.cpp
+	<math.h>
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<assert.h>
+	"glm.h"
+
+1384907876 e:\cfinalproject\chess\piece.h
+	<GL/gl.h>
+	<GL/glut.h>
+	"glm.h"
+
+1384971158 i:\cfinalproject\chess\piece.h
+	<GL/gl.h>
+	<GL/glut.h>
+	"glm.h"
+
