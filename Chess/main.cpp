@@ -30,7 +30,10 @@ bool specular = false;
 unsigned int startClock;
 unsigned int dt;
 
-Piece pawn1;
+Piece *whitePieces;
+Piece *blackPieces;
+
+float br, bg, bb, wr, wg, wb;
 
 enum color {BLACK, WHITE, GRAY, BROWN};
 color currentColor = BLACK;
@@ -125,11 +128,15 @@ void display (void) {
 
     glColor3f(.65, .5, .25); //light peice color
     glColor3f(.2, .12, .08); // dark peice color
-    glTranslatef(-3.5, -3.5, .5); //move  to the first location for a pawn
+
+    glTranslatef(-3.5, 3.5, .5); //move  to the first location for a pawn
     glRotatef(90, 1, 0, 0); // rotate along the x axis so the peices will be upright
     double sf = .08; // set the scale factor so that the peices will be smaller
 
-    pawn1.draw();
+    for(int i = 0; i < 16; i++){
+        blackPieces[i].draw();
+        whitePieces[i].draw();
+    }
    /* for(int i = 0; i < 8; i++){
         glScalef(sf, sf, sf); // scale using the scale factor
         glmDraw(pawn, GLM_SMOOTH | GL_FILL); //draw the pawn
@@ -152,7 +159,7 @@ void display (void) {
 
     glutSwapBuffers();
     dt = clock() - startClock; //find the time
-    angle += 360*.1*dt/1000;
+    angle += 360*.025*dt/1000;
 }
 
 void reshape (int w, int h) {
@@ -227,24 +234,55 @@ int main (int argc, char **argv) {
     glutReshapeFunc (reshape);
 
     pawn = (GLMmodel*)malloc(sizeof(GLMmodel));
-    /*knight = (GLMmodel*)malloc(sizeof(GLMmodel));
+    knight = (GLMmodel*)malloc(sizeof(GLMmodel));
     king = (GLMmodel*)malloc(sizeof(GLMmodel));
     queen = (GLMmodel*)malloc(sizeof(GLMmodel));
     rook = (GLMmodel*)malloc(sizeof(GLMmodel));
     bishop = (GLMmodel*)malloc(sizeof(GLMmodel));
-    knight = (GLMmodel*)malloc(sizeof(GLMmodel));*/
+    knight = (GLMmodel*)malloc(sizeof(GLMmodel));
 
-    pawn = glmReadOBJ("\pawn.obj");
-    /*knight = glmReadOBJ("\knight.obj");
-    king = glmReadOBJ("\king.obj");
-    queen = glmReadOBJ("\queen.obj");
-    rook = glmReadOBJ("\rook.obj");
-    bishop = glmReadOBJ("\bishop.obj");
-    knight = glmReadOBJ("\knight.obj");*/
+    pawn = glmReadOBJ("Pawn.obj");
+    knight = glmReadOBJ("Knight.obj");
+    king = glmReadOBJ("King.obj");
+    queen = glmReadOBJ("Queen.obj");
+    rook = glmReadOBJ("Rook.obj");
+    bishop = glmReadOBJ("Bishop.obj");
+    knight = glmReadOBJ("Knight.obj");
     //std::cout << "type of pawn1: " << typeid(pawn1).name();
-    //pawn1 = (Piece*)malloc(sizeof(Piece));
+    whitePieces = (Piece*)malloc(sizeof(Piece)*16);
+    blackPieces = (Piece*)malloc(sizeof(Piece)*16);
     //(0.0f, 0.0f, 0.0f, .1f, .1f, .1f, pawn)
-    pawn1 = getPiece(0.0f, 0.0f, 1.0f, .1f, .1f, .1f, .08f, pawn);
+
+    br = bg = bb = .1f;
+    wr = wg = wb = .8f;
+
+    //Creating the black pieces
+    blackPieces[0] = getPiece(0.0f, 0.0f, 0.0f, br, bg, bb, .06f, rook);
+    blackPieces[7 - 0] = getPiece(7.0f - 0.0f, 0.0f, 0.0f, br, bg, bb, .06f, rook);
+    blackPieces[1] = getPiece(1.0f, 0.0f, 0.0f, br, bg, bb, .06f, knight);
+    blackPieces[7 - 1] = getPiece(7.0f - 1.0f, 0.0f, 0.0f, br, bg, bb, .068f, knight);
+    blackPieces[2] = getPiece(2.0f, 0.0f, 0.0f, br, bg, bb, .06f, bishop);
+    blackPieces[7 - 2] = getPiece(7.0f - 2.0f, 0.0f, 0.0f, br, bg, bb, .06f, bishop);
+    blackPieces[3] = getPiece(3.0f, 0.0f, 0.0f, br, bg, bb, .06f, queen);
+    blackPieces[7 - 3] = getPiece(7.0f - 3.0f, 0.0f, 0.0f, br, bg, bb, .06f, king);
+    for(int i = 0; i < 8; i++){
+        blackPieces[i+8] = getPiece((float)i + 0.0f, 1.0f, 0.0f, .1f, .1f, .1f, .06f, pawn);
+    }
+
+    //Creating the white pieces
+    whitePieces[0] = getPiece(0.0f, 7.0f, 0.0f, wr, wg, wb, .06f, rook);
+    whitePieces[7 - 0] = getPiece(7.0f - 0.0f, 7.0f, 0.0f, wr, wg, wb, .06f, rook);
+    whitePieces[1] = getPiece(1.0f, 7.0f, 0.0f, wr, wg, wb, .06f, knight);
+    whitePieces[7 - 1] = getPiece(7.0f - 1.0f, 7.0f, 0.0f, wr, wg, wb, .068f, knight);
+    whitePieces[2] = getPiece(2.0f, 7.0f, 0.0f, wr, wg, wb, .06f, bishop);
+    whitePieces[7 - 2] = getPiece(7.0f - 2.0f, 7.0f, 0.0f, wr, wg, wb, .06f, bishop);
+    whitePieces[3] = getPiece(3.0f, 7.0f, 0.0f, wr, wg, wb, .06f, queen);
+    whitePieces[7 - 3] = getPiece(7.0f - 3.0f, 7.0f, 0.0f, wr, wg, wb, .06f, king);
+    for(int i = 0; i < 8; i++){
+        whitePieces[i+8] = getPiece((float)i + 0.0f, 6.0f, 0.0f, wr, wg, wb, .06f, pawn);
+    }
+
+    //pawn1 = getPiece(0.0f, 0.0f, 1.0f, .1f, .1f, .1f, .08f, pawn);
 
 
 	//displayList=glGenLists(1);

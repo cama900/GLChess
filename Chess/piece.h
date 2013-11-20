@@ -47,6 +47,7 @@ void Piece::draw(){
     glPushMatrix();
     glTranslatef(x, y, z);
     glScalef(sf, sf, sf);
+    glColor3f(r, g, b);
     glmDraw(model, GLM_SMOOTH | GL_FILL);
     glPopMatrix();
 }
