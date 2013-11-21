@@ -7,7 +7,7 @@ these three things must be included before the piece class
 
 class Piece{
     public:
-        Piece(float x, float y, float z, float r, float g, float b, float sf, GLMmodel *m);
+        Piece(float x, float y, float z, float r, float g, float b, float sf, float rot, GLMmodel *m);
         Piece();
         float x;
         float y;
@@ -16,11 +16,12 @@ class Piece{
         float g;
         float b;
         float sf;
+        float rot;
         GLMmodel *model;
         void draw();
 };
 
-Piece::Piece(float x, float y, float z, float r, float g, float b, float sf, GLMmodel *m){
+Piece::Piece(float x, float y, float z, float r, float g, float b, float sf, float rot, GLMmodel *m){
     Piece::x = x;
     Piece::y = y;
     Piece::z = z;
@@ -28,6 +29,7 @@ Piece::Piece(float x, float y, float z, float r, float g, float b, float sf, GLM
     Piece::g = g;
     Piece::b = b;
     Piece::sf = sf;
+    Piece::rot = rot;
     Piece::model = m;
 }
 
@@ -39,6 +41,7 @@ Piece::Piece(){
     Piece::g = 0;
     Piece::b = 0;
     Piece::sf = 0;
+    Piece::rot = rot;
     Piece::model = (GLMmodel*)malloc(sizeof(GLMmodel));
 }
 
@@ -47,6 +50,7 @@ void Piece::draw(){
     glPushMatrix();
     glTranslatef(x, y, z);
     glScalef(sf, sf, sf);
+    glRotatef(rot, 0, 1, 0);
     glColor3f(r, g, b);
     glmDraw(model, GLM_SMOOTH | GL_FILL);
     glPopMatrix();

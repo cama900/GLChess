@@ -32,6 +32,7 @@ unsigned int dt;
 
 Piece *whitePieces;
 Piece *blackPieces;
+GLuint pieceList;
 
 float br, bg, bb, wr, wg, wb;
 
@@ -44,7 +45,7 @@ int displayList = 0;
 
 void init (void) {
     glEnable (GL_DEPTH_TEST);
-    glEnable(GL_COLOR_MATERIAL);
+    //glEnable(GL_COLOR_MATERIAL);
     glEnable (GL_LIGHTING);
     glEnable (GL_LIGHT0);
     glEnable(GL_NORMALIZE);
@@ -131,22 +132,8 @@ void display (void) {
 
     glTranslatef(-3.5, 3.5, .5); //move  to the first location for a pawn
     glRotatef(90, 1, 0, 0); // rotate along the x axis so the peices will be upright
-    double sf = .08; // set the scale factor so that the peices will be smaller
 
-    for(int i = 0; i < 16; i++){
-        blackPieces[i].draw();
-        whitePieces[i].draw();
-    }
-   /* for(int i = 0; i < 8; i++){
-        glScalef(sf, sf, sf); // scale using the scale factor
-        glmDraw(pawn, GLM_SMOOTH | GL_FILL); //draw the pawn
-        glScalef(1/sf, 1/sf, 1/sf);//unscale
-        glTranslatef(1, 0, 0);//move to next pawn position
-        if(i % 2 != 0){ //change the pawn color
-            glColor3f(.2, .12, .08);
-        }
-        else glColor3f(.7, .6, .35);
-    }*/
+    glCallList(pieceList);
 
 
     //glRotatef(angle,1,1,1);
@@ -159,7 +146,7 @@ void display (void) {
 
     glutSwapBuffers();
     dt = clock() - startClock; //find the time
-    angle += 360*.025*dt/1000;
+    angle += 360*.1*dt/1000;
 }
 
 void reshape (int w, int h) {
@@ -171,53 +158,53 @@ void reshape (int w, int h) {
 }
 
 void keyboard (unsigned char key, int x, int y) {
-    if (key=='s')
-    {
-        if (specular==false)
-        {
-            specular = true;
-            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, whiteSpecularMaterial);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, mShininess);
-        }
-        else if (specular==true)
-        {
-            specular = false;
-            glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, blankMaterial);
-            glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, blankMaterial);
-        }
-    }
-
-    if (key=='d')
-    {
-        if (diffuse==false)
-        {
-            diffuse = true;
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, redDiffuseMaterial);
-        }
-        else if (diffuse==true)
-        {
-            diffuse = false;
-            glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, blankMaterial);
-        }
-    }
-
-    if (key=='e')
-    {
-        if (emissive==false)
-        {
-            emissive = true;
-            glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, greenEmissiveMaterial);
-        }
-        else if (emissive==true)
-        {
-            emissive = false;
-            glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION, blankMaterial);
-        }
-    }
 }
 
 Piece getPiece(float x, float y, float z, float r, float g, float b, float sf, GLMmodel *m){
-    return Piece(x, z, y, r, g, b, sf, m);
+    return Piece(x, z, y, r, g, b, sf, 0.0f, m);
+}
+
+Piece getPiece(float x, float y, float z, float r, float g, float b, float sf, float rot, GLMmodel *m){
+    return Piece(x, z, y, r, g, b, sf, rot, m);
+}
+
+void initPieces(){
+pieceList = glGenLists(1);
+    glNewList(pieceList,GL_COMPILE);
+        blackPieces[0].draw();
+        blackPieces[1].draw();
+        blackPieces[2].draw();
+        blackPieces[3].draw();
+        blackPieces[4].draw();
+        blackPieces[5].draw();
+        blackPieces[6].draw();
+        blackPieces[7].draw();
+        blackPieces[8].draw();
+        blackPieces[9].draw();
+        blackPieces[10].draw();
+        blackPieces[11].draw();
+        blackPieces[12].draw();
+        blackPieces[13].draw();
+        blackPieces[14].draw();
+        blackPieces[15].draw();
+
+        whitePieces[0].draw();
+        whitePieces[1].draw();
+        whitePieces[2].draw();
+        whitePieces[3].draw();
+        whitePieces[4].draw();
+        whitePieces[5].draw();
+        whitePieces[6].draw();
+        whitePieces[7].draw();
+        whitePieces[8].draw();
+        whitePieces[9].draw();
+        whitePieces[10].draw();
+        whitePieces[11].draw();
+        whitePieces[12].draw();
+        whitePieces[13].draw();
+        whitePieces[14].draw();
+        whitePieces[15].draw();
+    glEndList();
 }
 
 int main (int argc, char **argv) {
@@ -259,10 +246,10 @@ int main (int argc, char **argv) {
     //Creating the black pieces
     blackPieces[0] = getPiece(0.0f, 0.0f, 0.0f, br, bg, bb, .06f, rook);
     blackPieces[7 - 0] = getPiece(7.0f - 0.0f, 0.0f, 0.0f, br, bg, bb, .06f, rook);
-    blackPieces[1] = getPiece(1.0f, 0.0f, 0.0f, br, bg, bb, .06f, knight);
-    blackPieces[7 - 1] = getPiece(7.0f - 1.0f, 0.0f, 0.0f, br, bg, bb, .068f, knight);
-    blackPieces[2] = getPiece(2.0f, 0.0f, 0.0f, br, bg, bb, .06f, bishop);
-    blackPieces[7 - 2] = getPiece(7.0f - 2.0f, 0.0f, 0.0f, br, bg, bb, .06f, bishop);
+    blackPieces[1] = getPiece(1.0f, 0.0f, 0.0f, br, bg, bb, .06f, 90.0f, knight);
+    blackPieces[7 - 1] = getPiece(7.0f - 1.0f, 0.0f, 0.0f, br, bg, bb, .06f, 90.0f, knight);
+    blackPieces[2] = getPiece(2.0f, 0.0f, 0.0f, br, bg, bb, .06f, 90.0f, bishop);
+    blackPieces[7 - 2] = getPiece(7.0f - 2.0f, 0.0f, 0.0f, br, bg, bb, .06f, 90.0f, bishop);
     blackPieces[3] = getPiece(3.0f, 0.0f, 0.0f, br, bg, bb, .06f, queen);
     blackPieces[7 - 3] = getPiece(7.0f - 3.0f, 0.0f, 0.0f, br, bg, bb, .06f, king);
     for(int i = 0; i < 8; i++){
@@ -272,15 +259,17 @@ int main (int argc, char **argv) {
     //Creating the white pieces
     whitePieces[0] = getPiece(0.0f, 7.0f, 0.0f, wr, wg, wb, .06f, rook);
     whitePieces[7 - 0] = getPiece(7.0f - 0.0f, 7.0f, 0.0f, wr, wg, wb, .06f, rook);
-    whitePieces[1] = getPiece(1.0f, 7.0f, 0.0f, wr, wg, wb, .06f, knight);
-    whitePieces[7 - 1] = getPiece(7.0f - 1.0f, 7.0f, 0.0f, wr, wg, wb, .068f, knight);
-    whitePieces[2] = getPiece(2.0f, 7.0f, 0.0f, wr, wg, wb, .06f, bishop);
-    whitePieces[7 - 2] = getPiece(7.0f - 2.0f, 7.0f, 0.0f, wr, wg, wb, .06f, bishop);
+    whitePieces[1] = getPiece(1.0f, 7.0f, 0.0f, wr, wg, wb, .06f, -90.0f, knight);
+    whitePieces[7 - 1] = getPiece(7.0f - 1.0f, 7.0f, 0.0f, wr, wg, wb, .068f, -90.0f, knight);
+    whitePieces[2] = getPiece(2.0f, 7.0f, 0.0f, wr, wg, wb, .06f, -90.0f,  bishop);
+    whitePieces[7 - 2] = getPiece(7.0f - 2.0f, 7.0f, 0.0f, wr, wg, wb, .06f, -90.0f, bishop);
     whitePieces[3] = getPiece(3.0f, 7.0f, 0.0f, wr, wg, wb, .06f, queen);
     whitePieces[7 - 3] = getPiece(7.0f - 3.0f, 7.0f, 0.0f, wr, wg, wb, .06f, king);
     for(int i = 0; i < 8; i++){
         whitePieces[i+8] = getPiece((float)i + 0.0f, 6.0f, 0.0f, wr, wg, wb, .06f, pawn);
     }
+
+    initPieces();
 
     //pawn1 = getPiece(0.0f, 0.0f, 1.0f, .1f, .1f, .1f, .08f, pawn);
 
