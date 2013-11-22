@@ -1,12 +1,14 @@
 # depslib dependency file v1.0
-1385055330 source:i:\cfinalproject\chess\main.cpp
+1385081854 source:i:\cfinalproject\chess\main.cpp
 	<GL/gl.h>
 	<GL/glut.h>
 	"glm.h"
+	<cmath>
 	<ctime>
-	"piece.h"
 	<iostream>
+	<cstdio>
 	<typeinfo>
+	"piece.h"
 
 1383680544 i:\codeblocks-ep\mingw\include\gl\gl.h
 
@@ -256,12 +258,15 @@
 1384471720 i:\cfinalproject\chess\glm.h
 	<GL/glut.h>
 
-1384907850 source:e:\cfinalproject\chess\main.cpp
+1385081144 source:e:\cfinalproject\chess\main.cpp
 	<GL/gl.h>
 	<GL/glut.h>
 	"glm.h"
-	<iostream>
+	<cmath>
 	<ctime>
+	<iostream>
+	<cstdio>
+	<typeinfo>
 	"piece.h"
 
 1384471720 e:\cfinalproject\chess\glm.h
@@ -275,12 +280,12 @@
 	<assert.h>
 	"glm.h"
 
-1384907876 e:\cfinalproject\chess\piece.h
+1385081802 e:\cfinalproject\chess\piece.h
 	<GL/gl.h>
 	<GL/glut.h>
 	"glm.h"
 
-1385055692 i:\cfinalproject\chess\piece.h
+1385081854 i:\cfinalproject\chess\piece.h
 	<GL/gl.h>
 	<GL/glut.h>
 	"glm.h"

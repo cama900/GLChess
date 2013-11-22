@@ -5,10 +5,12 @@ models from http://www.turbosquid.com/FullPreview/Index.cfm/ID/686549
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include "glm.h"
+#include <cmath>
 #include <ctime>
-#include "piece.h"
 #include <iostream>
+#include <cstdio>
 #include <typeinfo>
+#include "piece.h"
 //#include "glm.h"
 
 GLfloat angle = 0.0;
@@ -29,6 +31,7 @@ bool specular = false;
 
 unsigned int startClock;
 unsigned int dt;
+unsigned int pieceClock;
 
 Piece *whitePieces;
 Piece *blackPieces;
@@ -43,9 +46,14 @@ GLMmodel *pawn, *rook, *knight, *bishop, *queen, *king;
 
 int displayList = 0;
 
+
+static int getDt(){
+    return dt;
+}
+
 void init (void) {
     glEnable (GL_DEPTH_TEST);
-    //glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_COLOR_MATERIAL);
     glEnable (GL_LIGHTING);
     glEnable (GL_LIGHT0);
     glEnable(GL_NORMALIZE);
@@ -119,7 +127,6 @@ void display (void) {
     glRotatef(-50, 1, 0, 0); // rotate 50 dgrees along the x axis
     glTranslatef(0 , 2, 0); // move the location 2 places down
 
-
     glScalef(.5, .5, .5); // scale to 50% in all angles so the board will fit on the screen
 
     glRotatef(angle,0, 0, 1); //rotate along z axis
@@ -130,23 +137,18 @@ void display (void) {
     glColor3f(.65, .5, .25); //light peice color
     glColor3f(.2, .12, .08); // dark peice color
 
-    glTranslatef(-3.5, 3.5, .5); //move  to the first location for a pawn
-    glRotatef(90, 1, 0, 0); // rotate along the x axis so the peices will be upright
+    glTranslatef(-3.5, -3.5, .5); //move  to the first location for a pawn
+    //glRotatef(90, 1, 0, 0); // rotate along the x axis so the peices will be upright
 
-    glCallList(pieceList);
-
-
-    //glRotatef(angle,1,1,1);
-
-    //glutSolidTeapot(1);
-
-    //glColor3f(.1,.1,.1);
-    //glCallList(displayList);
-    //glutSolidTeapot(2);
+    //glCallList(pieceList);
+    for(int i = 0; i < 16; i++){
+        blackPieces[i].draw(dt);
+        whitePieces[i].draw(dt);
+    }
 
     glutSwapBuffers();
     dt = clock() - startClock; //find the time
-    angle += 360*.1*dt/1000;
+    angle += 360*.05*dt/1000;
 }
 
 void reshape (int w, int h) {
@@ -161,66 +163,15 @@ void keyboard (unsigned char key, int x, int y) {
 }
 
 Piece getPiece(float x, float y, float z, float r, float g, float b, float sf, GLMmodel *m){
-    return Piece(x, z, y, r, g, b, sf, 0.0f, m);
+    return Piece(x, y, z, r, g, b, sf, 0.0f, m);
 }
 
 Piece getPiece(float x, float y, float z, float r, float g, float b, float sf, float rot, GLMmodel *m){
-    return Piece(x, z, y, r, g, b, sf, rot, m);
+    return Piece(x, y, z, r, g, b, sf, rot, m);
 }
 
 void initPieces(){
-pieceList = glGenLists(1);
-    glNewList(pieceList,GL_COMPILE);
-        blackPieces[0].draw();
-        blackPieces[1].draw();
-        blackPieces[2].draw();
-        blackPieces[3].draw();
-        blackPieces[4].draw();
-        blackPieces[5].draw();
-        blackPieces[6].draw();
-        blackPieces[7].draw();
-        blackPieces[8].draw();
-        blackPieces[9].draw();
-        blackPieces[10].draw();
-        blackPieces[11].draw();
-        blackPieces[12].draw();
-        blackPieces[13].draw();
-        blackPieces[14].draw();
-        blackPieces[15].draw();
-
-        whitePieces[0].draw();
-        whitePieces[1].draw();
-        whitePieces[2].draw();
-        whitePieces[3].draw();
-        whitePieces[4].draw();
-        whitePieces[5].draw();
-        whitePieces[6].draw();
-        whitePieces[7].draw();
-        whitePieces[8].draw();
-        whitePieces[9].draw();
-        whitePieces[10].draw();
-        whitePieces[11].draw();
-        whitePieces[12].draw();
-        whitePieces[13].draw();
-        whitePieces[14].draw();
-        whitePieces[15].draw();
-    glEndList();
-}
-
-int main (int argc, char **argv) {
-    glutInit (&argc, argv);
-    glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH);
-    glutInitWindowSize (500, 500);
-    glutInitWindowPosition (100, 100);
-    glutCreateWindow ("A basic OpenGL Window");
-
-    init ();
-    glutDisplayFunc (display);
-    glutIdleFunc (display);
-    glutKeyboardFunc (keyboard);
-    glutReshapeFunc (reshape);
-
-    pawn = (GLMmodel*)malloc(sizeof(GLMmodel));
+    pawn = (GLMmodel*)malloc(sizeof(GLMmodel)); //allocating memory for the piece objects
     knight = (GLMmodel*)malloc(sizeof(GLMmodel));
     king = (GLMmodel*)malloc(sizeof(GLMmodel));
     queen = (GLMmodel*)malloc(sizeof(GLMmodel));
@@ -228,49 +179,68 @@ int main (int argc, char **argv) {
     bishop = (GLMmodel*)malloc(sizeof(GLMmodel));
     knight = (GLMmodel*)malloc(sizeof(GLMmodel));
 
-    pawn = glmReadOBJ("Pawn.obj");
+    pawn = glmReadOBJ("Pawn.obj"); //reading in the obj files for each piece
     knight = glmReadOBJ("Knight.obj");
     king = glmReadOBJ("King.obj");
     queen = glmReadOBJ("Queen.obj");
     rook = glmReadOBJ("Rook.obj");
     bishop = glmReadOBJ("Bishop.obj");
     knight = glmReadOBJ("Knight.obj");
-    //std::cout << "type of pawn1: " << typeid(pawn1).name();
+
     whitePieces = (Piece*)malloc(sizeof(Piece)*16);
     blackPieces = (Piece*)malloc(sizeof(Piece)*16);
-    //(0.0f, 0.0f, 0.0f, .1f, .1f, .1f, pawn)
 
-    br = bg = bb = .1f;
+
+    br = bg = bb = .1f; //setting the colors for the black and white pieces
     wr = wg = wb = .8f;
 
     //Creating the black pieces
-    blackPieces[0] = getPiece(0.0f, 0.0f, 0.0f, br, bg, bb, .06f, rook);
-    blackPieces[7 - 0] = getPiece(7.0f - 0.0f, 0.0f, 0.0f, br, bg, bb, .06f, rook);
-    blackPieces[1] = getPiece(1.0f, 0.0f, 0.0f, br, bg, bb, .06f, 90.0f, knight);
-    blackPieces[7 - 1] = getPiece(7.0f - 1.0f, 0.0f, 0.0f, br, bg, bb, .06f, 90.0f, knight);
-    blackPieces[2] = getPiece(2.0f, 0.0f, 0.0f, br, bg, bb, .06f, 90.0f, bishop);
-    blackPieces[7 - 2] = getPiece(7.0f - 2.0f, 0.0f, 0.0f, br, bg, bb, .06f, 90.0f, bishop);
-    blackPieces[3] = getPiece(3.0f, 0.0f, 0.0f, br, bg, bb, .06f, queen);
-    blackPieces[7 - 3] = getPiece(7.0f - 3.0f, 0.0f, 0.0f, br, bg, bb, .06f, king);
+    blackPieces[0] = getPiece(0.0f, 7.0f, 0.0f, br, bg, bb, .06f, rook);
+    blackPieces[7 - 0] = getPiece(7.0f - 0.0f, 7.0f, 0.0f, br, bg, bb, .06f, rook);
+    blackPieces[1] = getPiece(1.0f, 7.0f, 0.0f, br, bg, bb, .06f, 90.0f, knight);
+    blackPieces[7 - 1] = getPiece(7.0f - 1.0f, 7.0f, 0.0f, br, bg, bb, .06f, 90.0f, knight);
+    blackPieces[2] = getPiece(2.0f, 7.0f, 0.0f, br, bg, bb, .06f, 90.0f, bishop);
+    blackPieces[7 - 2] = getPiece(7.0f - 2.0f, 7.0f, 0.0f, br, bg, bb, .06f, 90.0f, bishop);
+    blackPieces[3] = getPiece(3.0f, 7.0f, 0.0f, br, bg, bb, .06f, queen);
+    blackPieces[7 - 3] = getPiece(7.0f - 3.0f, 7.0f, 0.0f, br, bg, bb, .06f, king);
     for(int i = 0; i < 8; i++){
-        blackPieces[i+8] = getPiece((float)i + 0.0f, 1.0f, 0.0f, .1f, .1f, .1f, .06f, pawn);
+        blackPieces[i+8] = getPiece((float)i + 0.0f, 6.0f, 0.0f, .1f, .1f, .1f, .06f, pawn);
     }
 
     //Creating the white pieces
-    whitePieces[0] = getPiece(0.0f, 7.0f, 0.0f, wr, wg, wb, .06f, rook);
-    whitePieces[7 - 0] = getPiece(7.0f - 0.0f, 7.0f, 0.0f, wr, wg, wb, .06f, rook);
-    whitePieces[1] = getPiece(1.0f, 7.0f, 0.0f, wr, wg, wb, .06f, -90.0f, knight);
-    whitePieces[7 - 1] = getPiece(7.0f - 1.0f, 7.0f, 0.0f, wr, wg, wb, .068f, -90.0f, knight);
-    whitePieces[2] = getPiece(2.0f, 7.0f, 0.0f, wr, wg, wb, .06f, -90.0f,  bishop);
-    whitePieces[7 - 2] = getPiece(7.0f - 2.0f, 7.0f, 0.0f, wr, wg, wb, .06f, -90.0f, bishop);
-    whitePieces[3] = getPiece(3.0f, 7.0f, 0.0f, wr, wg, wb, .06f, queen);
-    whitePieces[7 - 3] = getPiece(7.0f - 3.0f, 7.0f, 0.0f, wr, wg, wb, .06f, king);
+    whitePieces[0] = getPiece(0.0f, 0.0f, 0.0f, wr, wg, wb, .06f, rook);
+    whitePieces[7 - 0] = getPiece(7.0f - 0.0f, 0.0f, 0.0f, wr, wg, wb, .06f, rook);
+    whitePieces[1] = getPiece(1.0f, 0.0f, 0.0f, wr, wg, wb, .06f, -90.0f, knight);
+    whitePieces[7 - 1] = getPiece(7.0f - 1.0f, 0.0f, 0.0f, wr, wg, wb, .06f, -90.0f, knight);
+    whitePieces[2] = getPiece(2.0f, 0.0f, 0.0f, wr, wg, wb, .06f, -90.0f,  bishop);
+    whitePieces[7 - 2] = getPiece(7.0f - 2.0f, 0.0f, 0.0f, wr, wg, wb, .06f, -90.0f, bishop);
+    whitePieces[3] = getPiece(3.0f, 0.0f, 0.0f, wr, wg, wb, .06f, queen);
+    whitePieces[7 - 3] = getPiece(7.0f - 3.0f, 0.0f, 0.0f, wr, wg, wb, .06f, king);
     for(int i = 0; i < 8; i++){
-        whitePieces[i+8] = getPiece((float)i + 0.0f, 6.0f, 0.0f, wr, wg, wb, .06f, pawn);
+        whitePieces[i+8] = getPiece((float)i + 0.0f, 1.0f, 0.0f, wr, wg, wb, .06f, pawn);
     }
+
+}
+
+
+int main (int argc, char **argv) {
+    glutInit (&argc, argv);
+    glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH);
+    glutInitWindowSize (900, 600);
+    glutInitWindowPosition (100, 100);
+    glutCreateWindow ("A basic OpenGL Window");
+
+    init ();
+
+    glutDisplayFunc (display);
+    glutIdleFunc (display);
+    glutKeyboardFunc (keyboard);
+    glutReshapeFunc (reshape);
+
 
     initPieces();
 
+    whitePieces[12].dy = 3.0f;
     //pawn1 = getPiece(0.0f, 0.0f, 1.0f, .1f, .1f, .1f, .08f, pawn);
 
 
