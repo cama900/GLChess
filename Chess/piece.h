@@ -25,11 +25,18 @@ class Piece{
         void updatePosition(double dt);
         void setY(float n);
         float getY();
+        void setNextMove(Piece *p, float x, float y);
+        bool hasUpdatedPosition;
     private:
+        bool hasNextMove;
+        Piece *nextPiece;
+        float nextX;
+        float nextY;
         double moveDistance;
+        double xMoveDistance;
+        double yMoveDistance;
         int steps;
         double a;
-        bool hasUpdatedDistance;
         void updateDistVar();
         double totalMoveTime;
         double moveTime;
@@ -68,10 +75,10 @@ float Piece::getY(){
 }
 
 void Piece::draw(double dt){
-    if(y != dy){
-        if(hasUpdatedDistance == false){
+    if(y != dy || x != dx){
+        if(hasUpdatedPosition == false){
             updateDistVar();
-            hasUpdatedDistance = true;
+            hasUpdatedPosition = true;
         }
         updatePosition(dt);
     }
@@ -88,7 +95,9 @@ void Piece::draw(double dt){
 
 void Piece::updateDistVar(){
     moveDistance = sqrt(pow((dx-x),2)+pow((dy-y),2)); // total length of major axis (path of movement)
-    totalMoveTime = 5000;
+    xMoveDistance = (dx - x);
+    yMoveDistance = (dy - y);
+    totalMoveTime = moveDistance*1000;
     moveTime = 0;
 }
 
@@ -102,24 +111,32 @@ void Piece::updatePosition(double dt) {
     }*/
 
     a = moveDistance/2;
-    if (x == dx) {
-        y = y + (moveDistance*dt/totalMoveTime);
+    if (x != dx) {
+            x += (xMoveDistance*dt/totalMoveTime);
     }
-    if (y == dy) {
-        x = x + (moveDistance*dt/totalMoveTime);
+    if (y != dy) {
+            y += (yMoveDistance*dt/totalMoveTime);
     }
 
     //z = z + (sqrt(4*(1-((x * x)/(a * a)))));
 
     moveTime += dt;
-    if(moveTime >= totalMoveTime){
+    if(moveTime >= totalMoveTime){ // if the move is over
         x = dx;
         y = dy;
         z = dz;
 
         moveDistance = 0;
+        hasUpdatedPosition = false;
     }
 
     std::cout << "x = " << x << " y = " << y << " z = " << z << std::endl;
+}
+
+void Piece::setNextMove(Piece *p, float x, float y){
+    hasNextMove = true;
+    nextPiece = p;
+    nextX = x;
+    nextY = y;
 }
 

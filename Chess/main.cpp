@@ -29,9 +29,13 @@ bool diffuse = false;
 bool emissive = false;
 bool specular = false;
 
+bool moving = false;
+
 unsigned int startClock;
 unsigned int dt;
 unsigned int pieceClock;
+unsigned int moveIndex = 0;
+unsigned int maxMoveIndex = 8;
 
 Piece *whitePieces;
 Piece *blackPieces;
@@ -46,6 +50,13 @@ GLMmodel *pawn, *rook, *knight, *bishop, *queen, *king;
 
 int displayList = 0;
 
+struct move{
+    Piece *piece;
+    float x;
+    float y;
+};
+
+struct move moves[8];
 
 static int getDt(){
     return dt;
@@ -146,9 +157,25 @@ void display (void) {
         whitePieces[i].draw(dt);
     }
 
+    if(moveIndex < maxMoveIndex){
+        if(moveIndex == 0){
+            moves[moveIndex].piece->dx = moves[moveIndex].x;
+            moves[moveIndex].piece->dy = moves[moveIndex].y;
+            moveIndex++;
+        }
+
+        else{
+            if(moves[moveIndex - 1].piece->hasUpdatedPosition == false){
+                moves[moveIndex].piece->dx = moves[moveIndex].x;
+                moves[moveIndex].piece->dy = moves[moveIndex].y;
+                moveIndex++;
+            }
+        }
+    }
+
     glutSwapBuffers();
     dt = clock() - startClock; //find the time
-    angle += 360*.05*dt/1000;
+    //angle += 360*.05*dt/1000;
 }
 
 void reshape (int w, int h) {
@@ -222,6 +249,41 @@ void initPieces(){
 
 }
 
+void initMoves(){
+    moves[0].piece = &whitePieces[12];
+    moves[0].x = whitePieces[12].x;
+    moves[0].y = 3.0f;
+
+    moves[1].piece = &blackPieces[1];
+    moves[1].x = 0.0f;
+    moves[1].y = 5.0f;
+
+    moves[2].piece = &whitePieces[5];
+    moves[2].x = 2.0f;
+    moves[2].y = 3.0f;
+
+    moves[3].piece = &blackPieces[15];
+    moves[3].x = blackPieces[15].x;
+    moves[3].y = 4.0f;
+
+    moves[4].piece = &whitePieces[3];
+    moves[4].x = 5.0f;
+    moves[4].y = 2.0f;
+
+    moves[5].piece = &blackPieces[9];
+    moves[5].x = blackPieces[9].x;
+    moves[5].y = 4.0f;
+
+    moves[6].piece = &whitePieces[3];
+    moves[6].x = 5.0f;
+    moves[6].y = 6.0f;
+
+    moves[7].piece = &blackPieces[13];
+    moves[7].x = 8.0f;
+    moves[7].y = blackPieces[13].y;
+
+}
+
 
 int main (int argc, char **argv) {
     glutInit (&argc, argv);
@@ -240,7 +302,10 @@ int main (int argc, char **argv) {
 
     initPieces();
 
-    whitePieces[12].dy = 3.0f;
+    initMoves();
+
+    //whitePieces[12].setNextMove(&blackPieces[12], 3.0f, 4.0f);
+    //whitePieces[12].dy = 3.0f;
     //pawn1 = getPiece(0.0f, 0.0f, 1.0f, .1f, .1f, .1f, .08f, pawn);
 
 

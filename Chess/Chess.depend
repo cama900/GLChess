@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1385081854 source:i:\cfinalproject\chess\main.cpp
+1385419034 source:i:\cfinalproject\chess\main.cpp
 	<GL/gl.h>
 	<GL/glut.h>
 	"glm.h"
@@ -285,7 +285,7 @@
 	<GL/glut.h>
 	"glm.h"
 
-1385081854 i:\cfinalproject\chess\piece.h
+1385419298 i:\cfinalproject\chess\piece.h
 	<GL/gl.h>
 	<GL/glut.h>
 	"glm.h"
