@@ -13,7 +13,9 @@ models from http://www.turbosquid.com/FullPreview/Index.cfm/ID/686549
 #include "piece.h"
 //#include "glm.h"
 
-GLfloat angle = 0.0;
+GLfloat horizontalAngle = 0.0;
+GLfloat verticalAngle = 0.0;
+GLfloat turnAngle = 0.0;
 
 GLfloat redDiffuseMaterial[] = {.1, .1, .1}; //set the material to red
 GLfloat whiteSpecularMaterial[] = {1, 1, 1}; //set the material to white
@@ -24,6 +26,9 @@ GLfloat blackAmbientLight[] = {0.0, 0.0, 0.0}; //set the light ambient to black
 GLfloat whiteDiffuseLight[] = {1.0, 1.0, 1.0}; //set the diffuse light to white
 GLfloat blankMaterial[] = {0.0, 0.0, 0.0}; //set the diffuse light to white
 GLfloat mShininess[] = {128}; //set the shininess of the material
+
+bool* keyStates = new bool[256]; // Create an array of boolean values of length 256 (0-255)
+bool* keySpecialStates = new bool[246];
 
 bool diffuse = false;
 bool emissive = false;
@@ -58,8 +63,33 @@ struct move{
 
 struct move moves[8];
 
-static int getDt(){
-    return dt;
+void initPieces();
+void initMoves();
+
+void keyOperations(){
+    if(keySpecialStates[GLUT_KEY_LEFT] == true){
+        horizontalAngle += 360*.1*dt/1000;
+    }
+
+    if(keySpecialStates[GLUT_KEY_RIGHT] == true){
+        horizontalAngle -= 360*.1*dt/1000;
+    }
+
+    if(keySpecialStates[GLUT_KEY_UP] == true){
+        verticalAngle += 360*.1*dt/1000;
+    }
+
+    if(keySpecialStates[GLUT_KEY_DOWN] == true){
+        verticalAngle -= 360*.1*dt/1000;
+    }
+
+    if(keyStates['z'] == true){
+        turnAngle += 360*.1*dt/1000;
+    }
+
+    if(keyStates['x'] == true){
+        turnAngle -= 360*.1*dt/1000;
+    }
 }
 
 void init (void) {
@@ -126,6 +156,7 @@ void drawBoard(){
 
 void display (void) {
     startClock = clock(); // starts the millisecond clock
+    keyOperations();
 
     glClearColor (0.30,0.30,0.30,1.0); //set the clear color
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //clear the screen
@@ -135,12 +166,19 @@ void display (void) {
 
     glColor3f(.05,.05,.05); //set the color to black (near black)
     glTranslatef(0,0,-3); //translate out 3 so things arent drawn on the camera
+
+
+    glRotatef(verticalAngle, 1, 0, 0); //rotate along z axis
+    //glRotatef(turnAngle, 0, 0, 1); //rotate along z axis
+
     glRotatef(-50, 1, 0, 0); // rotate 50 dgrees along the x axis
     glTranslatef(0 , 2, 0); // move the location 2 places down
 
     glScalef(.5, .5, .5); // scale to 50% in all angles so the board will fit on the screen
 
-    glRotatef(angle,0, 0, 1); //rotate along z axis
+    glRotatef(turnAngle, 0, 1, 0); //rotate along z axis
+    glRotatef(horizontalAngle, 0, 0, 1); //rotate along z axis
+
     glTranslatef(-3.5, -3, -4); //move out to first board square position
 
     drawBoard(); // draw the board and border
@@ -149,19 +187,25 @@ void display (void) {
     glColor3f(.2, .12, .08); // dark peice color
 
     glTranslatef(-3.5, -3.5, .5); //move  to the first location for a pawn
-    //glRotatef(90, 1, 0, 0); // rotate along the x axis so the peices will be upright
 
-    //glCallList(pieceList);
     for(int i = 0; i < 16; i++){
         blackPieces[i].draw(dt);
         whitePieces[i].draw(dt);
     }
 
-    if(moveIndex < maxMoveIndex){
+    if(moveIndex <= maxMoveIndex){
         if(moveIndex == 0){
             moves[moveIndex].piece->dx = moves[moveIndex].x;
             moves[moveIndex].piece->dy = moves[moveIndex].y;
             moveIndex++;
+        }
+
+        else if(moveIndex == maxMoveIndex){
+            if(moves[moveIndex - 1].piece->hasUpdatedPosition == false){
+                moveIndex = 0;
+                initPieces();
+                initMoves();
+            }
         }
 
         else{
@@ -173,8 +217,10 @@ void display (void) {
         }
     }
 
+
     glutSwapBuffers();
     dt = clock() - startClock; //find the time
+
     //angle += 360*.05*dt/1000;
 }
 
@@ -284,6 +330,21 @@ void initMoves(){
 
 }
 
+void keyboardDown(unsigned char key, int x, int y){
+    keyStates[key] = true;
+}
+
+void keyboardUp(unsigned char key, int x, int y){
+    keyStates[key] = false;
+}
+
+void keyboardSpecialDown(int key, int x, int y){
+    keySpecialStates[key] = true;
+}
+
+void keyboardSpecialUp(int key, int x, int y){
+    keySpecialStates[key] = false;
+}
 
 int main (int argc, char **argv) {
     glutInit (&argc, argv);
@@ -296,24 +357,17 @@ int main (int argc, char **argv) {
 
     glutDisplayFunc (display);
     glutIdleFunc (display);
-    glutKeyboardFunc (keyboard);
+
+    glutKeyboardFunc (keyboardDown);
+    glutKeyboardUpFunc(keyboardUp);
+
+    glutSpecialFunc(keyboardSpecialDown);
+    glutSpecialUpFunc(keyboardSpecialUp);
+
     glutReshapeFunc (reshape);
 
-
     initPieces();
-
     initMoves();
-
-    //whitePieces[12].setNextMove(&blackPieces[12], 3.0f, 4.0f);
-    //whitePieces[12].dy = 3.0f;
-    //pawn1 = getPiece(0.0f, 0.0f, 1.0f, .1f, .1f, .1f, .08f, pawn);
-
-
-	//displayList=glGenLists(1);
-	//glNewList(displayList,GL_COMPILE);
-		//glmList(stars, GLM_SMOOTH);
-		//glmDraw(stars, GLM_SMOOTH | GL_FILL);
-	//glEndList();
 
     glutMainLoop ();
 
